@@ -33,6 +33,6 @@ public class BoardPostOneResponseDto {
         this.likeCount = post.getLikeCount();
         this.viewCount = post.getViewCount();
         this.commentCount = post.getComments().size();
-        this.createdAt = post.getUpdatedAt();
+        this.createdAt = post.getCreatedAt();
     }
 }

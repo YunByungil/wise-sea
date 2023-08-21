@@ -100,7 +100,7 @@ public class BoardPostService {
         if (!post.getUser().getUsername().equals(username)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
-        postRepository.delete(post);
+        postRepository.deleteByQuerydsl(post);
         return new BoardPostDeleteResponseDto(post);
     }
 
