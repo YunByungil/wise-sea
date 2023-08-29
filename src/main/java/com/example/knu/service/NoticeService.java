@@ -199,7 +199,8 @@ public class NoticeService {
         Optional<BoardPost> foundBoardPost = boardPostRepository.findById(postid);
         if (foundBoardPost.isEmpty()) throw new CommonException("해당 공지사항이 존재하지 않습니다.");
         BoardPost boardPost = foundBoardPost.get();
-
+//        BoardPost boardPost = boardPostRepository.findByIdWithPessimisticLock(postid);
+        System.out.println("좋아요 기능");
         Optional<User> loginUser = userRepository.findByLoginId(principal.getName());
         User user = loginUser.get();
 
@@ -233,7 +234,7 @@ public class NoticeService {
         Pageable pageable = PageRequest.of(collegeNoticesRequest.getPageNumber() - 1, collegeNoticesRequest.getPageSize(), sort);
 
         Page<CollegeNoticesMapping> collegeNoticesMappingPage = noticeKnouOriginRepository.findAllByQuerydsl(pageable);
-
+        System.out.println("여기 접근함");
         return Response.success(new CollegeNoticesResponse(
                 PagingResponse.createPagingInfo(collegeNoticesMappingPage), collegeNoticesMappingPage.getContent()
         ));
