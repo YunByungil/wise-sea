@@ -63,5 +63,6 @@
 ## 🧐페이지
 
 ![image](https://github.com/YunByungil/wise-sea/assets/109706328/f342ae41-406d-4de0-89ca-1d62f0281316)
+![image](https://github.com/YunByungil/wise-sea/assets/109706328/b594efd7-086b-4a59-ac91-7f7aff7bea0d)
 
 
