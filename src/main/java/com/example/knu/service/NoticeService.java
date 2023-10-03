@@ -194,31 +194,32 @@ public class NoticeService {
      * @param postid
      * @return
      */
-    @Transactional
-    public Response likeNotice(Principal principal, Long postid) {
-        Optional<BoardPost> foundBoardPost = boardPostRepository.findById(postid);
-        if (foundBoardPost.isEmpty()) throw new CommonException("해당 공지사항이 존재하지 않습니다.");
-        BoardPost boardPost = foundBoardPost.get();
-
-        Optional<User> loginUser = userRepository.findByLoginId(principal.getName());
-        User user = loginUser.get();
-
-        Optional<Like> foundLike = likeRepository.findByUserAndBoardPost(user, boardPost);
-
-        if (foundLike.isEmpty()) {
-            Like like = Like.builder()
-                    .user(user)
-                    .boardPost(boardPost)
-                    .build();
-            likeRepository.save(like);
-            boardPost.addLikeCount(1);
-            return Response.success(null);
-        }
-
-        likeRepository.deleteByUserAndBoardPost(user, boardPost);
-        boardPost.addLikeCount(-1);
-        return Response.success(null);
-    }
+//    @Transactional
+//    public Response likeNotice(Principal principal, Long postid) {
+//        Optional<BoardPost> foundBoardPost = boardPostRepository.findById(postid);
+//        if (foundBoardPost.isEmpty()) throw new CommonException("해당 공지사항이 존재하지 않습니다.");
+//        BoardPost boardPost = foundBoardPost.get();
+////        BoardPost boardPost = boardPostRepository.findByIdWithPessimisticLock(postid);
+//        System.out.println("좋아요 기능");
+//        Optional<User> loginUser = userRepository.findByLoginId(principal.getName());
+//        User user = loginUser.get();
+//
+//        Optional<Like> foundLike = likeRepository.findByUserAndBoardPost(user, boardPost);
+//
+//        if (foundLike.isEmpty()) {
+//            Like like = Like.builder()
+//                    .user(user)
+//                    .boardPost(boardPost)
+//                    .build();
+//            likeRepository.save(like);
+//            boardPost.addLikeCount(1);
+//            return Response.success(null);
+//        }
+//
+//        likeRepository.deleteByUserAndBoardPost(user, boardPost);
+//        boardPost.addLikeCount(-1);
+//        return Response.success(null);
+//    }
 
     /**
      * 학과 공지사항 목록 조회
@@ -233,7 +234,7 @@ public class NoticeService {
         Pageable pageable = PageRequest.of(collegeNoticesRequest.getPageNumber() - 1, collegeNoticesRequest.getPageSize(), sort);
 
         Page<CollegeNoticesMapping> collegeNoticesMappingPage = noticeKnouOriginRepository.findAllByQuerydsl(pageable);
-
+        System.out.println("여기 접근함");
         return Response.success(new CollegeNoticesResponse(
                 PagingResponse.createPagingInfo(collegeNoticesMappingPage), collegeNoticesMappingPage.getContent()
         ));

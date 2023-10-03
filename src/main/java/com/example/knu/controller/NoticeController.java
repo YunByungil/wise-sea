@@ -61,15 +61,15 @@ public class NoticeController {
     /**
      * 게시글 좋아요
      */
-    @PreAuthorize("hasAnyRole('USER')")
-    @PostMapping("/api/user/boards/categories/{postid}/like")
-    public Response likeNotice(Principal principal,
-                               @PathVariable Long postid) {
-
-        Response response = noticeService.likeNotice(principal, postid);
-
-        return response;
-    }
+//    @PreAuthorize("hasAnyRole('USER')")
+//    @PostMapping("/api/user/boards/categories/{postid}/like")
+//    public Response likeNotice(Principal principal,
+//                               @PathVariable Long postid) {
+//
+//        Response response = noticeService.likeNotice(principal, postid);
+//
+//        return response;
+//    }
 
     /**
      * 학과 공지사항 목록 조회

@@ -2,7 +2,9 @@ package com.example.knu.domain.repository;
 
 import com.example.knu.domain.entity.board.BoardPost;
 import com.example.knu.domain.repository.custom.BoardPostCustom;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.parameters.P;
@@ -43,4 +45,16 @@ public interface BoardPostRepository extends JpaRepository<BoardPost, Long>, Boa
             "join fetch p.user " +
             "where p.id =:postId")
     Optional<BoardPost> findByBoardPostIdForUpdate(@Param("postId") Long postId);
+
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select p " +
+            "from BoardPost p " +
+            "where p.id =:postId")
+    BoardPost findByIdWithPessimisticLock(@Param("postId") Long postId);
+    @Lock(LockModeType.OPTIMISTIC)
+    @Query("select p " +
+            "from BoardPost p " +
+            "where p.id =:postId")
+    BoardPost findByIdWithOptimisticLock(@Param("postId") Long postId);
 }

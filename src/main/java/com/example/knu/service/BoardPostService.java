@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,6 +40,7 @@ public class BoardPostService {
     private final BoardRepository boardRepository;
     private final S3Uploader s3Uploader;
     private final FileRepository fileRepository;
+    private final FileJDBCRepository fileJDBCRepository;
 
     @Transactional
     public BoardPostCreateResponseDto createBoardPost(BoardPostCreateRequestDto postDto,
@@ -52,6 +54,7 @@ public class BoardPostService {
 
         BoardPost boardPost = postRepository.save(postDto.toEntity(boardCategory, user));
 
+        List<File> images = new ArrayList<>();
         if (postDto.getFiles() != null && !postDto.getFiles().isEmpty()) {
             List<MultipartFile> files = postDto.getFiles();
 //            if (files.size() > 5) throw new CommonException("파일은 5개까지 등록 가능합니다");
@@ -64,8 +67,10 @@ public class BoardPostService {
                         .boardPost(boardPost)
                         .url(fileUrl)
                         .build();
-                fileRepository.save(file);
+                images.add(file);
+//                fileRepository.save(file);
             }
+            fileJDBCRepository.customBulkInsert(images);
         }
 
         return new BoardPostCreateResponseDto(boardPost);
@@ -100,7 +105,7 @@ public class BoardPostService {
         if (!post.getUser().getUsername().equals(username)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
-        postRepository.delete(post);
+        postRepository.deleteByQuerydsl(post);
         return new BoardPostDeleteResponseDto(post);
     }
 
